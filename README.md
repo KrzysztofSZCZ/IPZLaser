@@ -11,3 +11,5 @@ This project is a ESP32-based two-axis laser scanner using DC motors with encode
 * Automatic scanner mode
 * 
 ![Szkic](https://user-images.githubusercontent.com/124584799/231593786-c9673d0c-30df-45ad-a7e3-04b9d79759c7.jpg)
+![Model](IPZLaser/zlozenie.png)
+![Model2](IPZLaser/zlozenie2.png)
