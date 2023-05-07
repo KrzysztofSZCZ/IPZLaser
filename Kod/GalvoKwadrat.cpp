@@ -1,110 +1,83 @@
 #include <PID_v1.h>
 
+const int encoder1PinA = 2;
+const int encoder1PinB = 3;
+const int motor1Pin = 9;
 
-const int encoderPinA = 2;   
-const int encoderPinB = 3;   
-const int motorPin = 9;     
+const int encoder2PinA = 4;
+const int encoder2PinB = 5;
+const int motor2Pin = 10;
 
+double Setpoint1 = 0;
+double Input1 = 0;
+double Output1 = 0;
 
-double Setpoint = 0;        
-double Input = 0;           
-double Output = 0;          
+double Setpoint2 = 0;
+double Input2 = 0;
+double Output2 = 0;
 
+PID pid1(&Input1, &Output1, &Setpoint1, 1.0, 0.0, 0.0, DIRECT);
+PID pid2(&Input2, &Output2, &Setpoint2, 1.0, 0.0, 0.0, DIRECT);
 
-double Kp = 1.0;           
-double Ki = 0.0;            
-double Kd = 0.0;            
-
-
-PID pid(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
-
-const int sideLength = 100; 
-int currentPosition = 0;    
-int targetPosition = 0;     
+const int sideLength = 100;
+int currentPosition1 = 0;
+int currentPosition2 = 0;
+int targetPosition1 = 0;
+int targetPosition2 = 0;
 
 void setup() {
+  pinMode(encoder1PinA, INPUT);
+  pinMode(encoder1PinB, INPUT);
+  pinMode(encoder2PinA, INPUT);
+  pinMode(encoder2PinB, INPUT);
+  pinMode(motor1Pin, OUTPUT);
+  pinMode(motor2Pin, OUTPUT);
 
-    pinMode(encoderPinA, INPUT);
-    pinMode(encoderPinB, INPUT);
-    pinMode(motorPin, OUTPUT);
+  pid1.SetMode(AUTOMATIC);
+  pid2.SetMode(AUTOMATIC);
 
-    pid.SetMode(AUTOMATIC);  
-
-
-    pid.SetOutputLimits(-255, 255);
-
+  pid1.SetOutputLimits(-255, 255);
+  pid2.SetOutputLimits(-255, 255);
 }
 
-void loop() { // kwadrat 
-    if (currentPosition == targetPosition) {
-        
-        if (currentPosition == 0) {
-            targetPosition = sideLength;         // Skręt w prawo
-        }
-        else if (currentPosition == sideLength) {
-            targetPosition = 2 * sideLength;     // Skręt w dół
-        }
-        else if (currentPosition == 2 * sideLength) {
-            targetPosition = 3 * sideLength;     // Skręt w lewo
-        }
-        else if (currentPosition == 3 * sideLength) {
-            targetPosition = 0;                   // skręt w gorę
-        }
-    }
-
-
-    int encoderValue = digitalRead(encoderPinA);
-
-    currentPosition = encoderValue;
-
-    Input = currentPosition;
-
- 
-    pid.Compute();
-
- 
-    if (Output >= 0) {
-        analogWrite(motorPin, Output);   
-    }
-    else {
-        analogWrite(motorPin, -Output);  
-    }
-
-    delay(10);  
-}
-
-/*void loop() //trojkąt  {
-
-  
-  if (currentPosition == targetPosition) {
-   
-    if (currentPosition == 0) {
-      targetPosition = sideLength;         // Ruch w przód
-    } else if (currentPosition == sideLength) {
-      targetPosition = -sideLength;        // Ruch w tył
-    } else if (currentPosition == -sideLength) {
-      targetPosition = 0;                   // Powrót na początek
+void loop() {
+  if (currentPosition1 == targetPosition1 && currentPosition2 == targetPosition2) {
+    if (currentPosition1 == 0 && currentPosition2 == 0) {
+      targetPosition1 = sideLength;
+      targetPosition2 = 0;
+    } else if (currentPosition1 == sideLength && currentPosition2 == 0) {
+      targetPosition1 = sideLength;
+      targetPosition2 = sideLength;
+    } else if (currentPosition1 == sideLength && currentPosition2 == sideLength) {
+      targetPosition1 = 0;
+      targetPosition2 = sideLength;
+    } else if (currentPosition1 == 0 && currentPosition2 == sideLength) {
+      targetPosition1 = 0;
+      targetPosition2 = 0;
     }
   }
 
+  int encoder1Value = digitalRead(encoder1PinA);
+  int encoder2Value = digitalRead(encoder2PinA);
 
- int encoderValue = digitalRead(encoderPinA);
+  Input1 = encoder1Value;
+  Input2 = encoder2Value;
 
-    currentPosition = encoderValue;
+  currentPosition1 = encoder1Value;
+  currentPosition2 = encoder2Value;
 
-    Input = currentPosition;
+  pid1.Compute();
+  pid2.Compute();
 
- 
-    pid.Compute();
+  if (Output1 >= 0) {
+    analogWrite(motor1Pin, Output1);
+  } else {
+    analogWrite(motor1Pin, -Output1);
+  }
 
- 
-    if (Output >= 0) {
-        analogWrite(motorPin, Output);   
-    }
-    else {
-        analogWrite(motorPin, -Output);  
-    }
-
-    delay(10);  
+  if (Output2 >= 0) {
+    analogWrite(motor2Pin, Output2);
+  } else {
+    analogWrite(motor2Pin, -Output2);
+  }
 }
-*/
