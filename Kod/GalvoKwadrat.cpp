@@ -1,12 +1,11 @@
 #include <PID_v1.h>
 
-const int encoder1PinA = 2;
-const int encoder1PinB = 3;
-const int motor1Pin = 9;
-
-const int encoder2PinA = 4;
-const int encoder2PinB = 5;
-const int motor2Pin = 10;
+#define ENCODER_PIN_A1 2   
+#define ENCODER_PIN_B1 3    
+#define ENCODER_PIN_A2 4    
+#define ENCODER_PIN_B2 5    
+#define MOTOR_PIN_1 9      
+#define MOTOR_PIN_2 10      
 
 double Setpoint1 = 0;
 double Input1 = 0;
@@ -16,8 +15,8 @@ double Setpoint2 = 0;
 double Input2 = 0;
 double Output2 = 0;
 
-PID pid1(&Input1, &Output1, &Setpoint1, 1.0, 0.0, 0.0, DIRECT);
-PID pid2(&Input2, &Output2, &Setpoint2, 1.0, 0.0, 0.0, DIRECT);
+PID pid1(&Input1, &Output1, &Setpoint1, 1.0, 0.5, 0.5, DIRECT);
+PID pid2(&Input2, &Output2, &Setpoint2, 1.0, 0.5, 0.5, DIRECT);
 
 const int sideLength = 100;
 int currentPosition1 = 0;
@@ -26,12 +25,12 @@ int targetPosition1 = 0;
 int targetPosition2 = 0;
 
 void setup() {
-  pinMode(encoder1PinA, INPUT);
-  pinMode(encoder1PinB, INPUT);
-  pinMode(encoder2PinA, INPUT);
-  pinMode(encoder2PinB, INPUT);
-  pinMode(motor1Pin, OUTPUT);
-  pinMode(motor2Pin, OUTPUT);
+  pinMode(ENCODER_PIN_A1, INPUT);
+  pinMode(ENCODER_PIN_B1, INPUT);
+  pinMode(ENCODER_PIN_A2, INPUT);
+  pinMode(ENCODER_PIN_B2, INPUT);
+  pinMode(MOTOR_PIN_1, OUTPUT);
+  pinMode(MOTOR_PIN_2, OUTPUT);
 
   pid1.SetMode(AUTOMATIC);
   pid2.SetMode(AUTOMATIC);
@@ -57,8 +56,8 @@ void loop() {
     }
   }
 
-  int encoder1Value = digitalRead(encoder1PinA);
-  int encoder2Value = digitalRead(encoder2PinA);
+  int encoder1Value = digitalRead(ENCODER_PIN_A1);
+  int encoder2Value = digitalRead(ENCODER_PIN_A2);
 
   Input1 = encoder1Value;
   Input2 = encoder2Value;
@@ -70,14 +69,14 @@ void loop() {
   pid2.Compute();
 
   if (Output1 >= 0) {
-    analogWrite(motor1Pin, Output1);
+    analogWrite(MOTOR_PIN_1, Output1);
   } else {
-    analogWrite(motor1Pin, -Output1);
+    analogWrite(MOTOR_PIN_1, -Output1);
   }
 
   if (Output2 >= 0) {
-    analogWrite(motor2Pin, Output2);
+    analogWrite(MOTOR_PIN_1, Output2);
   } else {
-    analogWrite(motor2Pin, -Output2);
+    analogWrite(MOTOR_PIN_2, -Output2);
   }
 }
