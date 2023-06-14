@@ -7,7 +7,7 @@ CREATE TABLE `shape` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `fullName` varchar(255),
   `machineId` int,
-  `data` int[100][100]
+  `data` int
 );
 
 CREATE TABLE `machine` (

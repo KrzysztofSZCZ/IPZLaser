@@ -4,8 +4,12 @@
 #define ENCODER_PIN_B1 3    
 #define ENCODER_PIN_A2 4    
 #define ENCODER_PIN_B2 5    
-#define MOTOR_PIN_1 9      
-#define MOTOR_PIN_2 10      
+#define MOTOR_PIN_A1 9      
+#define MOTOR_PIN_B1 10      
+#define MOTOR_PIN_A2 9      
+#define MOTOR_PIN_B2 10
+#define MOTOR_PWM_FREQ_ 5000
+
 
 double Setpoint1 = 0;
 double Input1 = 0;
@@ -29,8 +33,18 @@ void setup() {
   pinMode(ENCODER_PIN_B1, INPUT);
   pinMode(ENCODER_PIN_A2, INPUT);
   pinMode(ENCODER_PIN_B2, INPUT);
-  pinMode(MOTOR_PIN_1, OUTPUT);
-  pinMode(MOTOR_PIN_2, OUTPUT);
+  pinMode(MOTOR_PIN_A1, OUTPUT);
+  pinMode(MOTOR_PIN_A2, OUTPUT);
+  pinMode(MOTOR_PIN_B1, OUTPUT);
+  pinMode(MOTOR_PIN_B2, OUTPUT);
+
+  ledcSetup(0, MOTOR_PWM_FREQ, 8);
+  ledcSetup(1, MOTOR_PWM_FREQ, 8);
+  ledcAttachPin(MOTOR_PIN_1A, 0);
+  ledcAttachPin(MOTOR_PIN_1B, 1);
+  ledcAttachPin(MOTOR_PIN_2A, 2);
+  ledcAttachPin(MOTOR_PIN_2B, 3);
+
 
   pid1.SetMode(AUTOMATIC);
   pid2.SetMode(AUTOMATIC);
