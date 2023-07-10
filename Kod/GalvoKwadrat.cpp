@@ -1,14 +1,12 @@
 #include <PID_v1.h>
 
-#define ENCODER_PIN_A1 2   
-#define ENCODER_PIN_B1 3    
-#define ENCODER_PIN_A2 4    
-#define ENCODER_PIN_B2 5    
-#define MOTOR_PIN_A1 9      
-#define MOTOR_PIN_B1 10      
-#define MOTOR_PIN_A2 9      
-#define MOTOR_PIN_B2 10
-#define MOTOR_PWM_FREQ_ 5000
+#define MOTOR_PIN_1A 32
+#define MOTOR_PIN_1B 25
+#define MOTOR_PIN_2A 26
+#define MOTOR_PIN_2B 14
+#define PWM1 33
+#define PWM2 27
+#define MOTOR_PWM_FREQ 5000  
 
 
 double Setpoint1 = 0;
@@ -29,14 +27,10 @@ int targetPosition1 = 0;
 int targetPosition2 = 0;
 
 void setup() {
-  pinMode(ENCODER_PIN_A1, INPUT);
-  pinMode(ENCODER_PIN_B1, INPUT);
-  pinMode(ENCODER_PIN_A2, INPUT);
-  pinMode(ENCODER_PIN_B2, INPUT);
-  pinMode(MOTOR_PIN_A1, OUTPUT);
-  pinMode(MOTOR_PIN_A2, OUTPUT);
-  pinMode(MOTOR_PIN_B1, OUTPUT);
-  pinMode(MOTOR_PIN_B2, OUTPUT);
+  pinMode(MOTOR_PIN_1A, OUTPUT);
+  pinMode(MOTOR_PIN_2A, OUTPUT);
+  pinMode(MOTOR_PIN_1B, OUTPUT);
+  pinMode(MOTOR_PIN_2B, OUTPUT);
 
   ledcSetup(0, MOTOR_PWM_FREQ, 8);
   ledcSetup(1, MOTOR_PWM_FREQ, 8);
@@ -70,8 +64,8 @@ void loop() {
     }
   }
 
-  int encoder1Value = digitalRead(ENCODER_PIN_A1);
-  int encoder2Value = digitalRead(ENCODER_PIN_A2);
+  int encoder1Value = digitalRead(MOTOR_PIN_1A);
+  int encoder2Value = digitalRead(MOTOR_PIN_2A);
 
   Input1 = encoder1Value;
   Input2 = encoder2Value;
